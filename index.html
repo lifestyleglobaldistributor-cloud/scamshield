@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScamShield PH - Philippine Anti-Scam Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #f5576c;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .alert-box {
+            background: #ff4757;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(255,71,87,0.3);
+        }
+        
+        .alert-box h3 {
+            margin-bottom: 10px;
+        }
+        
+        .scam-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .scam-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .scam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .scam-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .scam-icon {
+            font-size: 1.5em;
+        }
+        
+        .scam-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .scam-details.active {
+            display: block;
+        }
+        
+        .scam-tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin: 5px 5px 5px 0;
+            color: #666;
+        }
+        
+        .danger {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .warning {
+            background: #ffa502;
+            color: white;
+        }
+        
+        .info {
+            background: #2ed573;
+            color: white;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .hotline {
+            font-size: 2em;
+            color: #f5576c;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 10px 5px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .stat-number {
+                font-size: 2em;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+        
+        .proof-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .proof-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .check-icon {
+            color: #2ed573;
+            font-size: 1.5em;
+        }
+        
+        .share-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .install-btn {
+            background: white;
+            color: #667eea;
+            padding: 15px 35px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        
+        .install-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        #installBtn {
+            display: none;
+        }
+        
+        .dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .dark-mode .header,
+        .dark-mode .stat-card,
+        .dark-mode .scam-card,
+        .dark-mode .footer,
+        .dark-mode .proof-section,
+        .dark-mode > div > div {
+            background: #0f3460;
+            color: #e8e8e8;
+        }
+        
+        .dark-mode h1, .dark-mode h2, .dark-mode h3 {
+            color: #00d4ff;
+        }
+        
+        .dark-mode .scam-tag {
+            background: #1a1a2e;
+            color: #e8e8e8;
+        }
+        
+        .dark-mode .stat-label,
+        .dark-mode p {
+            color: #b8b8b8;
+        }
+        
+        .toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .toggle-btn {
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .toggle-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .quick-dial {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .dial-btn {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(255,71,87,0.3);
+            transition: transform 0.2s;
+        }
+        
+        .dial-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,71,87,0.4);
+        }
+        
+        .dial-icon {
+            font-size: 2em;
+        }
+        
+        .dial-info {
+            text-align: left;
+        }
+        
+        .dial-number {
+            font-size: 1.3em;
+            display: block;
+        }
+        
+        .dial-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        @media print {
+            .toggle-container,
+            .share-section,
+            .social-icons,
+            .install-btn {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+            }
+            
+            .scam-details {
+                display: block !important;
+            }
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: #764ba2;
+        }
+        
+        .search-results {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .favorite-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .favorite-btn.active {
+            color: #ff4757;
+        }
+        
+        .favorites-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .favorites-section.has-favorites {
+            display: block;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .chart {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            align-items: flex-end;
+            height: 200px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 20px;
+        }
+        
+        .chart-bar:hover {
+            transform: translateY(-10px);
+        }
+        
+        .chart-label {
+            text-align: center;
+            font-size: 0.8em;
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-container">
+        <button class="toggle-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+            🌓
+        </button>
+        <button class="toggle-btn" onclick="window.print()" title="Print / Save as PDF">
+            🖨️
+        </button>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ ScamShield PH</h1>
+            <p style="margin: 10px 0; color: #666;">Your Verified Anti-Scam Protection Tool</p>
+            <div>
+                <span class="badge">Updated Nov 21, 2025</span>
+                <span class="badge">13.4% Fraud Rate (2nd Highest)</span>
+                <span class="badge">₱480B Annual Losses</span>
+            </div>
+        </div>
+
+        <div class="proof-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">✓ Verified Legitimate Anti-Scam Tool</h2>
+            <div class="proof-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>Real-time Data:</strong> All information sourced from official CICC, BSP, GSMA, TransUnion reports (Nov 2025)
+                </div>
+            </div>
+            <div class="proof-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>No Data Collection:</strong> This tool doesn't ask for personal info, passwords, OTPs, or payment
+                </div>
+            </div>
+            <div class="proof-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>Official Hotlines:</strong> Connects you to verified government anti-scam resources only
+                </div>
+            </div>
+            <div class="proof-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>100% Free:</strong> Educational tool - no payments, subscriptions, or hidden fees ever
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-box">
+            <h3>⚠️ NATIONAL EMERGENCY: Philippines #2 in Global Fraud</h3>
+            <p>13.4% fraud rate (2nd globally) • 74% targeted in Q4 2024 • 74% surge in scam calls Q1 2025 (351,699 cases) • ₱480B losses annually (1.9% GDP)</p>
+        </div>
+
+        <div class="search-box">
+            <h3 style="color: #667eea; margin-bottom: 15px;">🔍 Search Scams</h3>
+            <input type="text" 
+                   class="search-input" 
+                   id="searchInput" 
+                   placeholder="Type to search: online shopping, loan, investment, love scam..."
+                   oninput="searchScams()">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div class="favorites-section" id="favoritesSection">
+            <h2 style="color: #667eea; margin-bottom: 15px;">⭐ Your Bookmarked Scams</h2>
+            <div id="favoritesList"></div>
+        </div>
+
+        <div class="chart-container">
+            <h2 style="color: #667eea; margin-bottom: 15px;">📊 Scam Statistics Dashboard</h2>
+            <p style="color: #666; margin-bottom: 20px;">Top scam types by reported cases (2025)</p>
+            <div class="chart">
+                <div class="chart-bar" style="height: 90%;">
+                    <span class="chart-value">55%</span>
+                </div>
+                <div class="chart-bar" style="height: 70%;">
+                    <span class="chart-value">24%</span>
+                </div>
+                <div class="chart-bar" style="height: 50%;">
+                    <span class="chart-value">15%</span>
+                </div>
+                <div class="chart-bar" style="height: 40%;">
+                    <span class="chart-value">10%</span>
+                </div>
+                <div class="chart-bar" style="height: 30%;">
+                    <span class="chart-value">8%</span>
+                </div>
+                <div class="chart-bar" style="height: 25%;">
+                    <span class="chart-value">6%</span>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; text-align: center;">
+                <div class="chart-label">Loan Scams</div>
+                <div class="chart-label">VIP Rewards</div>
+                <div class="chart-label">Investment</div>
+                <div class="chart-label">Collections</div>
+                <div class="chart-label">Shopping</div>
+                <div class="chart-label">Romance</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">13.4%</div>
+                <div class="stat-label">Digital Fraud Rate (2nd Highest)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">74%</div>
+                <div class="stat-label">Scam Call Surge Q1 2025</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">52%</div>
+                <div class="stat-label">Filipinos Scammed (Lifetime)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">₱480B</div>
+                <div class="stat-label">Annual Losses (1.9% GDP)</div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+            <h2 style="color: #667eea; margin-bottom: 15px;">🔥 Top 12 Scams of Christmas 2025 (CICC Official)</h2>
+            <p style="margin-bottom: 15px; color: #666;">Click each scam to learn protection methods • Data from Holiday Watch PH 2025 campaign (Nov 17, 2025)</p>
+        </div>
+
+        <div class="scam-grid">
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🛒</span> #1 Online Shopping Scam</h3>
+                <span class="scam-tag danger">CRITICAL THREAT</span>
+                <span class="scam-tag">Facebook/Instagram</span>
+                <button class="favorite-btn" onclick="toggleFavorite(event, 'shopping')" title="Bookmark this scam">
+                    ⭐
+                </button>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Two-phase attack: (1) Fake Facebook pages pretending to be legitimate stores, and (2) Real sellers sending wrong, damaged, or counterfeit items. Surge after 11.11, Black Friday, 12.12 sales.</p>
+                    <p><strong>Red flags:</strong> Too-good prices, new accounts, no reviews, requests for direct bank transfer, rush to buy.</p>
+                    <p><strong>Protection:</strong> Verify seller legitimacy, check reviews from multiple sources, use secure payment methods with buyer protection, screenshot all conversations.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">📦</span> #2 Fake Delivery Scam</h3>
+                <span class="scam-tag danger">EVOLVING THREAT</span>
+                <span class="scam-tag">SMS/COD</span>
+                <button class="favorite-btn" onclick="toggleFavorite(event, 'delivery')" title="Bookmark this scam">⭐</button>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> No longer just phishing links. Now using COD (cash-on-delivery) services, victimizing both customers and riders through "pabili" services. Fake delivery notifications asking to click links or pay fees.</p>
+                    <p><strong>Red flags:</strong> Unexpected delivery notices, links in SMS, requests for payment before delivery, unknown tracking numbers.</p>
+                    <p><strong>Protection:</strong> Track orders only through official courier websites (type URL manually), verify with sender, never click SMS links, inspect COD packages before paying.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">📞</span> #3 Call/Vishing Scam</h3>
+                <span class="scam-tag danger">74% SURGE Q1 2025</span>
+                <span class="scam-tag">351,699 cases</span>
+                <button class="favorite-btn" onclick="toggleFavorite(event, 'call')" title="Bookmark this scam">⭐</button>
+                <div class="scam-details">
+                    <p><strong>Alarming data:</strong> 74% increase Q1 2025 (108,157 to 351,699 cases). Remnants of dismantled POGO operations now conducting scam calls. Well-trained groups of 7-10 people using AI voice changers.</p>
+                    <p><strong>Top types:</strong> Loan offers (55%), VIP rewards (24%), collections (10%), transaction verification (5%), job applications (3%), delivery (3%).</p>
+                    <p><strong>Red flags:</strong> Unsolicited calls from banks/government, urgency/threats, requests for OTP/PIN/account details, too-good-to-be-true offers.</p>
+                    <p><strong>Protection:</strong> Hang up immediately, call official numbers yourself, never share OTP/PIN, banks/government won't demand payment over phone, use caller ID apps like Whoscall.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">💼</span> #4 Task/Job Scam</h3>
+                <span class="scam-tag warning">HIGH RISK</span>
+                <span class="scam-tag">Viber/WhatsApp</span>
+                <button class="favorite-btn" onclick="toggleFavorite(event, 'job')" title="Bookmark">⭐</button>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Promise easy money for simple tasks (liking posts, watching videos, app reviews). Start with small payments to build trust. Eventually ask for "investment" or upfront payment to unlock higher earnings. Circulating on Viber and WhatsApp.</p>
+                    <p><strong>Red flags:</strong> Unrealistic earnings (₱5,000+ for simple tasks), upfront payment required, pressure to recruit others, cryptocurrency payments.</p>
+                    <p><strong>Protection:</strong> Legitimate jobs don't require payment, verify company with SEC/DTI, be suspicious of guaranteed high income, research company online thoroughly.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">📈</span> #5 Investment Scam</h3>
+                <span class="scam-tag danger">₱100B+ losses 2024</span>
+                <span class="scam-tag">Ponzi/Pyramid</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Promise guaranteed high returns (12% weekly, 48% monthly) with little/no risk. Often Ponzi or pyramid schemes. Heavy targeting of OFWs and professionals through social media and WhatsApp groups.</p>
+                    <p><strong>2024 losses:</strong> Over ₱100 billion, especially among OFWs and working professionals.</p>
+                    <p><strong>Red flags:</strong> Guaranteed returns, pressure to invest quickly, recruitment commissions, unregistered with SEC, vague business model.</p>
+                    <p><strong>Protection:</strong> If too good to be true, it is. Check SEC registration at sec.gov.ph, understand that high returns = high risk, consult financial advisor, avoid pressure tactics.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">❤️</span> #6 Love/Romance Scam</h3>
+                <span class="scam-tag warning">Long-term scheme</span>
+                <span class="scam-tag">Dating apps</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Build fake romantic relationship online over weeks/months. Gain deep trust through daily communication. Now using deepfake technology for video calls. Eventually request money for emergencies, travel, medical needs, business opportunities.</p>
+                    <p><strong>Targets:</strong> OFWs, retirees, emotionally vulnerable individuals, singles.</p>
+                    <p><strong>Red flags:</strong> Quick profession of love, can't meet in person, asks for money, shares sob stories, claims to be overseas military/professional.</p>
+                    <p><strong>Protection:</strong> Never send money to someone you haven't met, verify identity via multiple video calls, reverse image search their photos, be wary of financial requests.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">💰</span> #7 Loan Scam</h3>
+                <span class="scam-tag warning">55% of scam calls</span>
+                <span class="scam-tag">SMS/Apps</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Unsolicited loan offers via call, text, social media. Promise instant approval with no requirements. Require upfront fees for "processing," "insurance," or "release." Loan never materializes. 55% of all scam calls are loan-related.</p>
+                    <p><strong>Red flags:</strong> Unsolicited offers, guaranteed approval, upfront payment required, pressure for immediate decision, SMS with clickable links.</p>
+                    <p><strong>Protection:</strong> Legitimate lenders don't ask for advance payment, verify with BSP registered lenders list, read all terms carefully, never click SMS loan links.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">👤</span> #8 Impersonation Scam</h3>
+                <span class="scam-tag danger">Government/Banks</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Impersonate government officials (BIR, NBI, CICC, BOC), bank employees, company executives, or family members. Use AI voice cloning for convincing calls. Threaten legal action, claim account issues, or create urgent family emergencies to extract money or information.</p>
+                    <p><strong>Targets:</strong> All demographics, especially seniors and professionals.</p>
+                    <p><strong>Protection:</strong> Establish family code words, verify through official channels, government agencies don't demand immediate payment, call back on known official numbers, be suspicious of urgency.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">✈️</span> #9 Travel Scam</h3>
+                <span class="scam-tag warning">Holiday surge</span>
+                <span class="scam-tag">Booking sites</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Fake travel booking websites, too-good-to-be-true packages, non-existent accommodations. Spike during Christmas and summer vacation planning. Fake social media ads for hotel/flight deals.</p>
+                    <p><strong>Red flags:</strong> Prices significantly below market rate, payment only via wire transfer, new/suspicious websites, no contact information, pressure to book immediately.</p>
+                    <p><strong>Protection:</strong> Book through verified travel agencies (DOT accredited), use credit cards for protection, verify hotel/airline directly, research company reviews, get written confirmation.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🙏</span> #10 Charity Scam</h3>
+                <span class="scam-tag info">Exploits generosity</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Fake charity appeals on social media, viral medical fundraising posts where money doesn't reach victims, impersonation of legitimate charities. Exploit Filipino generosity especially during Christmas.</p>
+                    <p><strong>Red flags:</strong> Only accepts direct bank transfers, no official charity registration, aggressive emotional appeals, unverified medical cases.</p>
+                    <p><strong>Protection:</strong> Donate through verified organizations only, check DSWD or LGU validation, verify charity registration with SEC, be wary of direct bank transfers to individuals, ask for receipts.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🔄</span> #11 Middleman Scam</h3>
+                <span class="scam-tag warning">Gadget reselling</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Common in gadget reselling and online transactions. Fake "middleman" or broker claims to facilitate safe transactions between buyer and seller. Takes payment from both parties and disappears.</p>
+                    <p><strong>Red flags:</strong> Unknown middleman, requests payment before delivery, no physical meetup, pressure to use specific payment method.</p>
+                    <p><strong>Protection:</strong> Use established platforms with buyer protection (Lazada, Shopee), meet in person for high-value items, use COD when possible, verify broker identity and reviews.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🎰</span> #12 Online Gambling Scam</h3>
+                <span class="scam-tag warning">POGO-related</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Illegal online gambling sites that rig games, refuse to pay winnings, or steal deposits. Related to banned POGO operations. Promise easy money but games are programmed to make you lose.</p>
+                    <p><strong>Red flags:</strong> Guaranteed wins, unregistered sites, requires large deposits, won't allow withdrawals, operates offshore.</p>
+                    <p><strong>Protection:</strong> Online gambling is illegal in Philippines except PAGCOR, avoid unlicensed sites, understand house always wins, seek help for gambling addiction at 1553 (NCMH).</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🚨 Additional Major Threats</h2>
+        </div>
+
+        <div class="scam-grid">
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🤖</span> AI-Powered Scams (NEW 2025)</h3>
+                <span class="scam-tag danger">EMERGING THREAT</span>
+                <span class="scam-tag">Deepfakes/Voice</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Use AI to clone voices of family members or create deepfake videos requesting urgent money. ChatGPT and free AI tools make scams more convincing and accessible. Highly convincing impersonations of loved ones in distress.</p>
+                    <p><strong>Protection:</strong> Establish family code words, verify through multiple channels, be suspicious of urgent financial requests, call back on known numbers, ask personal questions only real family would know.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🏢</span> POGO/Human Trafficking Scams</h3>
+                <span class="scam-tag danger">Life imprisonment</span>
+                <span class="scam-tag">Criminal operation</span>
+                <div class="scam-details">
+                    <p><strong>Recent case:</strong> Alice Guo (former Bamban mayor) convicted Nov 20, 2025 - sentenced to life imprisonment for running illegal scam compound where hundreds were forced to conduct online scams. Chinese national who falsely claimed Filipino citizenship.</p>
+                    <p><strong>How it works:</strong> Recruit workers for "online gaming" or "customer service" jobs abroad. Force them into scam operations. Often involves human trafficking, passport confiscation, physical abuse.</p>
+                    <p><strong>Protection:</strong> Research employers thoroughly, verify company registration, be wary of "too good" overseas job offers, report suspicious job postings to DOLE and CICC, never surrender passport to employer.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">📱</span> SIM Swap/Palit SIM</h3>
+                <span class="scam-tag warning">Banking threat</span>
+                <span class="scam-tag">Telco</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Scammers request SIM replacement from your telco provider pretending to be you. Gain access to your phone number. Reset banking passwords via SMS OTP. Drain bank accounts.</p>
+                    <p><strong>Protection:</strong> Register SIM under SIM Registration Act (RA 11934), set SIM PIN/PUK code, monitor unusual network activity (sudden loss of signal), use app-based 2FA (Google Authenticator) instead of SMS when possible, contact telco immediately if signal lost.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🎣</span> Phishing (Email/SMS)</h3>
+                <span class="scam-tag danger">19.2% fraud rate</span>
+                <span class="scam-tag">Banks/Gov</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Fake emails/SMS from "banks," government agencies, or companies with malicious links. Steal passwords, credit card info, OTPs. Websites look identical to real ones.</p>
+                    <p><strong>Statistics:</strong> 19.2% suspected fraud rate in online communities (highest among industries analyzed).</p>
+                    <p><strong>Red flags:</strong> Urgent action required, suspicious sender address, spelling errors, requests for sensitive info, unexpected attachments/links.</p>
+                    <p><strong>Protection:</strong> Check sender email/number carefully, don't click suspicious links, type URLs manually, hover over links to see real destination, enable 2FA on all accounts, verify with company directly.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">💳</span> Account Takeover (ATO)</h3>
+                <span class="scam-tag danger">₱409M losses 2024</span>
+                <span class="scam-tag">Banking</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Criminals gain unauthorized access to bank or e-wallet accounts by stealing login credentials through phishing, malware, or data breaches. Transfer money out before victim notices.</p>
+                    <p><strong>2024 impact:</strong> ₱409 million lost due to ATO-related fraud in Philippines alone.</p>
+                    <p><strong>Protection:</strong> Use strong unique passwords for each account, enable 2FA/biometrics, monitor transactions daily, set up transaction alerts, never save passwords in browser, log out after sessions, update apps regularly.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">💸</span> Money Mule Recruitment</h3>
+                <span class="scam-tag warning">Criminal liability</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Recruit you to transfer money through your account, promising commission. You become accomplice to money laundering. Your account used to move stolen funds.</p>
+                    <p><strong>Legal consequences:</strong> Can be charged with money laundering (RA 9160), face imprisonment and fines, permanent criminal record.</p>
+                    <p><strong>Protection:</strong> Never let others use your bank account/e-wallet, understand you can be criminally liable, report recruitment attempts to BSP and AMLC, legitimate work doesn't involve transferring others' money.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">💳</span> Card Skimming</h3>
+                <span class="scam-tag warning">ATM/POS</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Illegal devices attached to ATMs or payment terminals copy your card data and PIN. Used to create cloned cards or make unauthorized transactions.</p>
+                    <p><strong>Protection:</strong> Inspect ATMs for suspicious devices before use, cover keypad when entering PIN, use ATMs in well-lit secure locations (inside banks), monitor transactions immediately after ATM use, use chip/contactless over magnetic stripe, report suspicious ATMs to bank.</p>
+                </div>
+            </div>
+
+            <div class="scam-card" onclick="toggleDetails(this)">
+                <h3><span class="scam-icon">🎰</span> Lottery/Prize Scam</h3>
+                <span class="scam-tag info">Common</span>
+                <div class="scam-details">
+                    <p><strong>How it works:</strong> Claim you won lottery, raffle, or prize you never entered. Ask for processing fees, taxes, or personal info to claim prize that doesn't exist.</p>
+                    <p><strong>Red flags:</strong> Winning something you didn't enter, upfront payment required, urgency to claim, requests for bank details or ID copies.</p>
+                    <p><strong>Protection:</strong> You can't win what you didn't enter, legitimate lotteries don't require payment to claim (taxes deducted from winnings), verify with official PCSO only, never share bank details for "prize claims."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h2 style="color: #667eea; margin-bottom: 15px;">🚨 Report Scams Immediately</h2>
+            <div class="hotline">1326</div>
+            <p style="margin-bottom: 20px; color: #666;">National Anti-Scam Hotline (24/7 Free)</p>
+            
+            <div style="margin: 25px 0;">
+                <h3 style="color: #333; margin-bottom: 15px;">Official Reporting Channels:</h3>
+                <p>📱 <strong>eGOVPH App</strong> - eReport section (cybercrime complaints)</p>
+                <p>🌐 <strong>CICC Portal</strong> - cicc.gov.ph/report</p>
+                <p>👮 <strong>PNP Anti-Cybercrime</strong> - 02-723-0401 ext 5364</p>
+                <p>🏦 <strong>BSP Financial Consumer</strong> - consumeraffairs@bsp.gov.ph</p>
+                <p>💰 <strong>AMLC (Money Laundering)</strong> - 02-8708-7087</p>
+                <p>📞 <strong>NTC (Telco Issues)</strong> - 02-8924-4286</p>
+                <p>💼 <strong>SEC (Investment Scams)</strong> - enforcementandprosecution@sec.gov.ph</p>
+            </div>
+
+            <div style="margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">#KontraScamAttitude Campaign</h3>
+                <p style="margin: 10px 0;"><strong>1. Be Cautious</strong> - Question suspicious messages and offers</p>
+                <p style="margin: 10px 0;"><strong>2. Be Skeptical</strong> - Verify before trusting anyone online</p>
+                <p style="margin: 10px 0;"><strong>3. Ignore</strong> - Don't engage with suspected scammers</p>
+                <p style="margin: 10px 0;"><strong>4. Report</strong> - Help protect others by reporting scams to 1326</p>
+            </div>
+
+            <div style="margin: 25px 0; padding: 20px; background: #fff3cd; border-radius: 10px; border-left: 5px solid #ffa502;">
+                <h3 style="color: #333; margin-bottom: 15px;">⚡ Quick Protection Tips</h3>
+                <p style="margin: 8px 0;">✓ Never share OTP codes with anyone (even "bank staff")</p>
+                <p style="margin: 8px 0;">✓ Don't click links in unexpected SMS/emails</p>
+                <p style="margin: 8px 0;">✓ Verify caller identity by calling official numbers yourself</p>
+                <p style="margin: 8px 0;">✓ If it sounds too good to be true, it is</p>
+                <p style="margin: 8px 0;">✓ No legitimate business demands urgent payment</p>
+                <p style="margin: 8px 0;">✓ Government agencies don't threaten arrest over phone</p>
+                <p style="margin: 8px 0;">✓ Use official apps, not links from messages</p>
+                <p style="margin: 8px 0;">✓ Enable 2FA on all financial accounts</p>
+                <p style="margin: 8px 0;">✓ Register your SIM (RA 11934)</p>
+                <p style="margin: 8px 0;">✓ Monitor bank transactions daily</p>
+            </div>
+
+            <a href="https://cicc.gov.ph" class="btn" target="_blank">Visit CICC Official</a>
+            <a href="https://www.bsp.gov.ph/Pages/FinancialConsumer/default.aspx" class="btn" target="_blank">BSP Consumer Protection</a>
+            <a href="https://www.sec.gov.ph" class="btn" target="_blank">SEC Investment Verification</a>
+            
+            <p style="margin-top: 30px; color: #999; font-size: 0.9em; line-height: 1.6;">
+                <strong>Data Sources:</strong> CICC Holiday Watch PH Campaign (Nov 17, 2025), TransUnion Global Fraud Study (Oct 2024), GSMA Fraud Report (Q4 2024), BSP Financial Consumer Protection (2024-2025), PNP Anti-Cybercrime Group<br><br>
+                <strong>Last Updated:</strong> November 21, 2025<br><br>
+                This is a FREE educational tool for Filipino protection • No data collected • No registration required • No payment ever • Share to protect your family and friends
+            </p>
+
+            <div style="margin-top: 25px; padding: 20px; background: #e3f2fd; border-radius: 10px;">
+                <p style="color: #1976d2; font-weight: bold; margin-bottom: 10px;">🛡️ Share This Tool to Protect Others!</p>
+                <p style="color: #555; font-size: 0.9em;">68% of scam victims lose money. Knowledge is the best protection. Share ScamShield PH with your family, friends, and communities.</p>
+            </div>
+        </div>
+
+        <div class="share-section">
+            <h2 style="margin-bottom: 15px;">📢 Share ScamShield PH</h2>
+            <p style="margin-bottom: 20px; opacity: 0.9;">Help protect your family and friends from scams</p>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon" onclick="shareToFacebook(event)" title="Share on Facebook">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </a>
+                
+                <a href="#" class="social-icon" onclick="shareToMessenger(event)" title="Share on Messenger">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 4.975 0 11.111c0 3.497 1.745 6.616 4.472 8.652V24l4.086-2.242c1.09.301 2.246.464 3.442.464 6.627 0 12-4.974 12-11.111C24 4.975 18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/>
+                    </svg>
+                </a>
+                
+                <a href="#" class="social-icon" onclick="shareToTwitter(event)" title="Share on Twitter/X">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                
+                <a href="#" class="social-icon" onclick="shareToWhatsApp(event)" title="Share on WhatsApp">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                </a>
+                
+                <a href="#" class="social-icon" onclick="shareToViber(event)" title="Share on Viber">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.398.002C9.473.028 5.331.344 3.014 2.467 1.294 4.177.693 6.698.623 9.82c-.06 3.11-.13 8.95 5.5 10.541v2.42s-.038.97.602 1.17c.79.25 1.24-.499 1.99-1.299l1.4-1.58c3.85.32 6.8-.419 7.14-.529.78-.25 5.181-.811 5.901-6.652.74-6.031-.36-9.831-2.34-11.551l-.01-.002c-.6-.55-3-2.3-8.37-2.32 0 0-.396-.025-1.038-.016zm.067 1.697c.545-.003.88.02.88.02 4.54.01 6.711 1.38 7.221 1.84 1.67 1.429 2.528 4.856 1.9 9.892-.6 4.88-4.17 5.19-4.83 5.4-.28.09-2.88.73-6.152.52 0 0-2.439 2.941-3.199 3.701-.12.13-.26.17-.35.15-.13-.03-.17-.19-.16-.41l.02-4.019c-4.771-1.32-4.491-6.302-4.441-8.902.06-2.6.55-4.732 2-6.172 1.957-1.77 5.475-2.01 7.11-2.02zm.36 2.6a.299.299 0 00-.3.299.3.3 0 00.3.3 5.631 5.631 0 014.03 1.59 5.357 5.357 0 011.681 3.94.3.3 0 00.3.3h.008a.3.3 0 00.292-.309 5.957 5.957 0 00-1.863-4.39 6.245 6.245 0 00-4.448-1.73zm-3.954.69a.955.955 0 00-.615.12l-.12.06s-.125.058-.327.237a2.658 2.658 0 00-.629.99.554.554 0 00-.01.04 3.213 3.213 0 00.19 2.24c.238.61.73 1.73 1.52 2.87.02.03.04.05.058.07.9 1.24 2.01 2.25 3.3 2.98l.04.03c.37.21.663.36.904.46.5.21.92.27 1.3.22.27-.04.56-.22.79-.4a.72.72 0 00.03-.03 4.03 4.03 0 00.52-.58c.2-.27.33-.53.4-.74.09-.3.07-.5 0-.63-.12-.13-.26-.2-.49-.31l-1.4-.64s-.14-.06-.23-.09c-.2-.06-.35-.04-.48.03-.11.06-.56.53-.78.74-.05.06-.16.14-.34.11-.15-.02-.4-.11-.72-.3-1.24-.68-2.37-2.04-2.73-2.58a.744.744 0 01-.15-.26c-.02-.06-.02-.13.03-.19.12-.13.25-.26.38-.4.07-.08.14-.15.21-.22.14-.17.18-.27.24-.4.1-.2.07-.36-.02-.52l-.9-2.01c-.08-.18-.16-.27-.24-.33a.766.766 0 00-.28-.14h-.01a.883.883 0 00-.35-.05zm8.389.49a.3.3 0 00-.3.3.3.3 0 00.3.3 3.931 3.931 0 012.81 1.12c.739.738 1.16 1.678 1.25 2.832a.3.3 0 00.3.28h.01a.3.3 0 00.29-.32 4.531 4.531 0 00-1.44-3.262 4.638 4.638 0 00-3.22-1.25zm-4.116.54c.08 0 .15.01.21.03.09.03.13.05.15.08.01.02.04.04.07.12l.9 2.01c.04.08.03.12.02.14-.01.02-.02.03-.05.07a1.787 1.787 0 01-.17.18c-.09.1-.2.21-.3.32-.14.15-.28.31-.4.48-.18.25-.15.5-.12.64.04.18.13.35.22.5.38.58 1.57 2 2.94 2.76.4.22.73.35.97.4.35.07.61-.02.76-.11a.55.55 0 00.08-.06c.1-.09.2-.18.3-.29.1-.1.21-.21.3-.32.05-.06.1-.1.14-.13.1-.08.22-.1.37-.05.05.02.12.04.18.07l1.4.64c.1.04.16.07.2.1.01.01.02.01.02.01 0 .03-.01.1-.06.23-.06.16-.16.38-.32.59-.18.24-.38.45-.52.58-.01.01-.02.02-.03.03-.17.14-.37.27-.54.29-.26.04-.55-.01-.95-.17-.21-.08-.49-.22-.85-.42l-.01-.01c-1.21-.68-2.24-1.62-3.08-2.78-.01-.01-.02-.03-.03-.04-.77-1.1-1.25-2.18-1.47-2.76a2.613 2.613 0 01-.16-1.83c0-.01.01-.02.01-.03.12-.27.29-.51.52-.8.16-.19.37-.45.37-.45.06-.05.12-.1.18-.14zm3.729.19a.3.3 0 00-.3.299.3.3 0 00.3.3 2.082 2.082 0 011.53.56c.36.36.572.813.64 1.35a.3.3 0 00.3.27h.01a.3.3 0 00.29-.32 2.472 2.472 0 00-.76-1.59 2.608 2.608 0 00-1.94-.68h-.07z"/>
+                    </svg>
+                </a>
+                
+                <a href="#" class="social-icon" onclick="shareToTelegram(event)" title="Share on Telegram">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+                
+                <a href="#" class="social-icon" onclick="copyLink(event)" title="Copy Link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </a>
+            </div>
+            
+            <button id="installBtn" class="install-btn" onclick="installApp()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Add to Home Screen
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(card) {
+            const details = card.querySelector('.scam-details');
+            const allDetails = document.querySelectorAll('.scam-details');
+            
+            // Close all other details
+            allDetails.forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('active');
+                }
+            });
+            
+            // Toggle current detail
+            details.classList.toggle('active');
+        }
+
+        // Share functions
+        const shareUrl = window.location.href;
+        const shareTitle = 'ScamShield PH - Protect Against Scams';
+        const shareText = '🛡️ Protect yourself from scams! 52% of Filipinos have been scammed. Learn about the top scams and how to stay safe. #KontraScamAttitude';
+
+        function shareToFacebook(e) {
+            e.preventDefault();
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400');
+        }
+
+        function shareToMessenger(e) {
+            e.preventDefault();
+            window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(shareUrl)}&app_id=140586622674265&redirect_uri=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400');
+        }
+
+        function shareToTwitter(e) {
+            e.preventDefault();
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400');
+        }
+
+        function shareToWhatsApp(e) {
+            e.preventDefault();
+            window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
+        }
+
+        function shareToViber(e) {
+            e.preventDefault();
+            window.open(`viber://forward?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
+        }
+
+        function shareToTelegram(e) {
+            e.preventDefault();
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+        }
+
+        function copyLink(e) {
+            e.preventDefault();
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('✓ Link copied! Share it to protect your family and friends from scams.');
+            }).catch(() => {
+                prompt('Copy this link:', shareUrl);
+            });
+        }
+
+        // PWA Install functionality
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'inline-flex';
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('ScamShield PH installed');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installBtn').style.display = 'none';
+                });
+            } else {
+                // Fallback for iOS or browsers without PWA support
+                if (navigator.userAgent.match(/iPhone|iPad|iPod/)) {
+                    alert('To add to home screen:\n1. Tap the Share button\n2. Select "Add to Home Screen"');
+                } else {
+                    alert('Use your browser menu to add this app to your home screen.');
+                }
+            }
+        }
+
+        window.addEventListener('appinstalled', () => {
+            console.log('ScamShield PH installed successfully');
+            document.getElementById('installBtn').style.display = 'none';
+        });
+
+        // Track page load for analytics (no personal data)
+        window.addEventListener('load', function() {
+            console.log('ScamShield PH loaded successfully');
+            console.log('Protecting Filipinos from scams since 2025');
+            
+            // Display last update time
+            const updateTime = new Date('2025-11-21').toLocaleDateString('en-PH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            console.log('Last updated:', updateTime);
+        });
+
+        // Accessibility: Allow keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('scam-card')) {
+                toggleDetails(e.target);
+            }
+        });
+
+        // Auto-scroll detection
+        console.log('Total page height:', document.body.scrollHeight);
+        console.log('Share section exists:', document.querySelector('.share-section') ? 'YES' : 'NO');
+        
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            console.log('Dark mode:', isDark ? 'ON' : 'OFF');
+        }
+        
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // Search functionality
+        function searchScams() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const scamCards = document.querySelectorAll('.scam-card');
+            let visibleCount = 0;
+            
+            scamCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const details = card.querySelector('.scam-details').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || details.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+            
+            const resultsDiv = document.getElementById('searchResults');
+            if (searchTerm) {
+                resultsDiv.textContent = `Found ${visibleCount} scam(s) matching "${searchTerm}"`;
+            } else {
+                resultsDiv.textContent = '';
+            }
+        }
+        
+        // Bookmark/Favorites functionality
+        function toggleFavorite(event, scamId) {
+            event.stopPropagation();
+            const btn = event.target;
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            
+            if (favorites.includes(scamId)) {
+                // Remove from favorites
+                const index = favorites.indexOf(scamId);
+                favorites.splice(index, 1);
+                btn.classList.remove('active');
+            } else {
+                // Add to favorites
+                favorites.push(scamId);
+                btn.classList.add('active');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesList();
+        }
+        
+        function updateFavoritesList() {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const favSection = document.getElementById('favoritesSection');
+            const favList = document.getElementById('favoritesList');
+            
+            if (favorites.length > 0) {
+                favSection.classList.add('has-favorites');
+                favList.innerHTML = `<p style="color: #666;">You have ${favorites.length} bookmarked scam(s). Click on any scam card to view details.</p>`;
+            } else {
+                favSection.classList.remove('has-favorites');
+            }
+            
+            // Update all favorite buttons
+            document.querySelectorAll('.favorite-btn').forEach((btn, index) => {
+                const scamIds = ['shopping', 'delivery', 'call', 'job', 'investment', 'love', 'loan', 'impersonation', 'travel', 'charity', 'middleman', 'gambling', 'ai', 'pogo', 'sim', 'phishing', 'ato', 'mule', 'skimming', 'lottery'];
+                if (favorites.includes(scamIds[index])) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Load favorites on page load
+        window.addEventListener('load', updateFavoritesList);
+    </script>
+</body>
+</html>
